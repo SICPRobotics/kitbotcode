@@ -11,8 +11,11 @@ import frc.robot.Constants.LauncherConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.LaunchNote;
+import frc.robot.commands.MotorCommand;
 import frc.robot.commands.PrepareLaunch;
 import frc.robot.subsystems.CANDrivetrain;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Joe;
 import frc.robot.subsystems.PWMDrivetrain;
 import frc.robot.subsystems.PWMLauncher;
 
@@ -30,10 +33,14 @@ public class RobotContainer {
   private final CANDrivetrain m_drivetrain = new CANDrivetrain();
   // private final CANDrivetrain m_drivetrain = new CANDrivetrain();
   private final PWMLauncher m_launcher = new PWMLauncher();
+  private final Intake intake = new Intake();
+  private final Joe joe = new Joe();
   // private final CANLauncher m_launcher = new CANLauncher();
 
   /*The gamepad provided in the KOP shows up like an XBox controller if the mode switch is set to X mode using the
    * switch on the top.*/
+  
+
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController m_operatorController =
@@ -50,7 +57,6 @@ public class RobotContainer {
    * named factory methods in the Command* classes in edu.wpi.first.wpilibj2.command.button (shown
    * below) or via the Trigger constructor for arbitary conditions
    */
-  //newcomment
   private void configureBindings() {
     // Set the default command for the drivetrain to drive using the joysticks
     m_drivetrain.setDefaultCommand(
@@ -62,6 +68,12 @@ public class RobotContainer {
 
     /*Create an inline sequence to run when the operator presses and holds the A (green) button. Run the PrepareLaunch
      * command for 1 seconds and then run the LaunchNote command */
+    m_operatorController.x().whileTrue(new MotorCommand(intake, .5));
+    m_operatorController.b().whileTrue(new MotorCommand(intake, -.5));
+
+    m_operatorController.y().whileTrue(new MotorCommand(joe, .5));
+    //m_operatorController.a().whileTrue(new MotorCommand(joe, -.5));
+
     m_operatorController
         .a()
         .whileTrue(
@@ -82,6 +94,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;//Autos.exampleAuto(m_drivetrain);
+    return Autos.exampleAuto(m_drivetrain);
   }
 }

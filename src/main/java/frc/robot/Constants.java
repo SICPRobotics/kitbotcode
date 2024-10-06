@@ -20,6 +20,14 @@ public final class Constants {
     public static final int kOperatorControllerPort = 1;
   }
 
+  public static class Intake{
+    public static final int intakeID = 0;
+  }
+
+  public static class Joe{
+    public static final int JoeID = 0;
+  }
+
   public static class DrivetrainConstants {
     // PWM ports/CAN IDs for motor controllers
     public static final int kLeftRearID = 1;

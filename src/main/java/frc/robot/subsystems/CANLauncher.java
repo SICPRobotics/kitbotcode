@@ -10,8 +10,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.SubsystemBaseWrapper;
 
-public class CANLauncher extends SubsystemBase {
+public class CANLauncher extends SubsystemBaseWrapper {
   CANSparkMax m_launchWheel;
   CANSparkMax m_feedWheel;
 
