@@ -16,24 +16,24 @@ public final class Constants {
   public static class OperatorConstants {
     // Port numbers for driver and operator gamepads. These correspond with the numbers on the USB
     // tab of the DriverStation
-    public static final int kDriverControllerPort = 0;
-    public static final int kOperatorControllerPort = 1;
+    //public static final int kDriverControllerPort = 0;
+    public static final int kOperatorControllerPort = 0;
   }
 
   public static class Intake{
-    public static final int intakeID = 0;
+    public static final int intakeID = 4;
   }
 
   public static class Joe{
-    public static final int JoeID = 0;
+    public static final int JoeID = 7;
   }
 
   public static class DrivetrainConstants {
     // PWM ports/CAN IDs for motor controllers
-    public static final int kLeftRearID = 1;
-    public static final int kLeftFrontID = 2;
-    public static final int kRightRearID = 3;
-    public static final int kRightFrontID = 4;
+    public static final int kLeftRearID = 2;
+    public static final int kLeftFrontID = 1;
+    public static final int kRightRearID = 5;
+    public static final int kRightFrontID = 3;
 
     // Current limit for drivetrain motors
     public static final int kCurrentLimit = 60;
@@ -41,8 +41,8 @@ public final class Constants {
 
   public static class LauncherConstants {
     // PWM ports/CAN IDs for motor controllers
-    public static final int kFeederID = 5;
-    public static final int kLauncherID = 6;
+    public static final int kFeederID = 8;
+    public static final int kLauncherID = 7;
 
     // Current limit for launcher and feed wheels
     public static final int kLauncherCurrentLimit = 80;
@@ -53,8 +53,8 @@ public final class Constants {
     public static final double kLauncherSpeed = 1;
     public static final double kLaunchFeederSpeed = 1;
     public static final double kIntakeLauncherSpeed = -1;
-    public static final double kIntakeFeederSpeed = -.2;
+    public static final double kIntakeFeederSpeed = -1;
 
-    public static final double kLauncherDelay = 1;
+    public static final double kLauncherDelay = 1.5;
   }
 }

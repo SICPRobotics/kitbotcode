@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import com.ctre.phoenix6.signals.ControlModeValue;
@@ -17,14 +18,15 @@ import frc.robot.Constants;
 import frc.robot.SubsystemBaseWrapper;
 
 
-public class Intake extends SubsystemBaseWrapper implements MotorSubsystem{
-    CANSparkMax intake;
+public class Intake extends SubsystemBaseWrapper implements MotorSubsystem {
+    TalonFX intake;
+    public DigitalInput limitSwitch = new DigitalInput(0);
 
     public Intake(){
         // change out value of pivot id once plugged in
-        this.intake = new CANSparkMax(Constants.Intake.intakeID, MotorType.kBrushed);
+        this.intake = new TalonFX(Constants.Intake.intakeID);
 
-        this.intake.setIdleMode(IdleMode.kBrake);
+        this.intake.setNeutralMode(NeutralModeValue.Brake);
     }
 
     @Override

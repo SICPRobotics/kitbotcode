@@ -7,17 +7,19 @@ package frc.robot.subsystems;
 import static frc.robot.Constants.LauncherConstants.*;
 
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.SubsystemBaseWrapper;
 
-public class PWMLauncher extends SubsystemBase {
-  PWMSparkMax m_launchWheel;
-  PWMSparkMax m_feedWheel;
+public class PWMLauncher extends SubsystemBaseWrapper implements MotorSubsystem {
+  Spark m_launchWheel;
+  Spark m_feedWheel;
 
   /** Creates a new Launcher. */
   public PWMLauncher() {
-    m_launchWheel = new PWMSparkMax(kLauncherID);
-    m_feedWheel = new PWMSparkMax(kFeederID);
+    m_launchWheel = new Spark(kLauncherID);
+    m_feedWheel = new Spark(kFeederID);
   }
 
   /**
@@ -52,10 +54,25 @@ public class PWMLauncher extends SubsystemBase {
     m_feedWheel.set(speed);
   }
 
+  public void setBoth(double speed){
+    m_launchWheel.set(speed);
+    m_feedWheel.set(speed);
+  }
+
   // A helper method to stop both wheels. You could skip having a method like this and call the
   // individual accessors with speed = 0 instead
   public void stop() {
     m_launchWheel.set(0);
+    m_feedWheel.set(0);
+  }
+
+  @Override
+  public void setMotor(double value, boolean force) {
+    m_feedWheel.set(value);
+  }
+
+  @Override
+  public void turnOff() {
     m_feedWheel.set(0);
   }
 }

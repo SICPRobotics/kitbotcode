@@ -5,6 +5,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.LauncherConstants;
@@ -41,8 +44,7 @@ public class RobotContainer {
    * switch on the top.*/
   
 
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  //private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController m_operatorController =
       new CommandXboxController(OperatorConstants.kOperatorControllerPort);
 
@@ -63,28 +65,66 @@ public class RobotContainer {
         new RunCommand(
             () ->
                 m_drivetrain.arcadeDrive(
-                    -m_driverController.getLeftY(), -m_driverController.getRightX()),
+                    -m_operatorController.getLeftY()*Math.abs(m_operatorController.getLeftY()), 
+                    -m_operatorController.getRightX()*Math.abs(m_operatorController.getRightX())),
             m_drivetrain));
 
     /*Create an inline sequence to run when the operator presses and holds the A (green) button. Run the PrepareLaunch
      * command for 1 seconds and then run the LaunchNote command */
-    m_operatorController.x().whileTrue(new MotorCommand(intake, .5));
-    m_operatorController.b().whileTrue(new MotorCommand(intake, -.5));
 
-    m_operatorController.y().whileTrue(new MotorCommand(joe, .5));
-    //m_operatorController.a().whileTrue(new MotorCommand(joe, -.5));
+    // intakes the intake
+    m_operatorController
+        .x()
+        .whileTrue(new ParallelCommandGroup(new MotorCommand(intake, .3), new MotorCommand(joe, -.25)));
+            // CHANGE JOE VALUES
 
+    // when release x intake polybelt A LITTLE
+    m_operatorController.x().onFalse(
+      new MotorCommand(joe, 0).withTimeout(.5).andThen(new MotorCommand(joe, .2).withTimeout(.35)));
+
+
+    // launches note
     m_operatorController
         .a()
+        .whileTrue(
+            new LaunchNote(m_launcher)
+                .withTimeout(LauncherConstants.kLauncherDelay)
+                .andThen(new ParallelCommandGroup(new MotorCommand(joe, -.5), new LaunchNote(m_launcher))));
+                // CHANGE JOE VALUES
+    
+
+    // outtakes the intake
+    m_operatorController
+        .y()
+        .whileTrue(new ParallelCommandGroup(new MotorCommand(intake, .3), new MotorCommand(joe, .25)));
+        // CHANGE JOE VALUES
+
+
+     // intakes shooter
+    m_operatorController.rightBumper().whileTrue(m_launcher.getIntakeCommand());
+    
+    // intakes polybelt
+    m_operatorController.b().whileTrue(new MotorCommand(joe, .2));
+    // CHANGE JOE VALUES (CHANGED)
+
+    // runs everyything so note shoot out (testing purposes)
+    /*m_operatorController.leftBumper()
+    .whileTrue(
+      new ParallelCommandGroup(
+        new LaunchNote(m_launcher), new MotorCommand(joe, -.5), new MotorCommand(intake, .3))); */
+
+
+    /* m_operatorController
+        .b()
         .whileTrue(
             new PrepareLaunch(m_launcher)
                 .withTimeout(LauncherConstants.kLauncherDelay)
                 .andThen(new LaunchNote(m_launcher))
-                .handleInterrupt(() -> m_launcher.stop()));
+                .handleInterrupt(() -> m_launcher.stop())); */
 
     // Set up a binding to run the intake command while the operator is pressing and holding the
     // left Bumper
-    m_operatorController.leftBumper().whileTrue(m_launcher.getIntakeCommand());
+     
   }
 
   /**
@@ -94,6 +134,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_drivetrain);
+    return Autos.exampleAuto(m_drivetrain, m_launcher, joe);
   }
 }

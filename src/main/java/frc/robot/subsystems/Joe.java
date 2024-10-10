@@ -15,7 +15,7 @@ import frc.robot.Constants;
 import frc.robot.SubsystemBaseWrapper;
 
 
-public class Joe extends SubsystemBaseWrapper implements MotorSubsystem{
+public class Joe extends SubsystemBaseWrapper implements MotorSubsystem {
     private TalonFX Joe;
 
     public Joe(){
